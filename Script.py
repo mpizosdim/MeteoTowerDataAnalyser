@@ -3,7 +3,7 @@
 import simplekml
 import numpy as np
 import pandas as pd
-
+import MeteoMpiz
 ##
 ##latitude = int(input('Input the latitude of the Meteorological Tower:'))
 ##longitude = int(input('Input the longitude of the Meteorological Tower:'))
@@ -25,3 +25,6 @@ else:
     else:
         df = pd.read_csv(PathOftheFile, sep='\t', names=ColumnTypes)
 print(df)
+data = np.array([np.arange(10)]).T
+lol = MeteoMpiz.Environment(Pressure=101e3, AirGasConstant=287, AirDensity=[],Temperature=data)
+lol.describe()
