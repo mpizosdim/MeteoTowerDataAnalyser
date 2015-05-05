@@ -16,9 +16,12 @@ PathOftheFile = input('Enter the path of the file:')
 TypeOfInput = input('Are the name/type of the columns defined in the file?')
 
 if TypeOfInput=='yes':
-    df = pd.read_csv(PathOftheFile, sep='\t')
+    df = pd.read_csv(PathOftheFile, sep='\t', index_col=0, parse_dates=True)
 else:
-    UserInput = input('Enter the names of the types separated by commas')
+    UserInput = input('Enter the names of the types separated by commas(refer to day if there is)')
     ColumnTypes = UserInput.split(',')
-    df = pd.read_csv(PathOftheFile, sep='\t', names=ColumnTypes)
+    if ColumnTypes[0]=='date':
+        df = pd.read_csv(PathOftheFile, sep='\t', names=ColumnTypes, index_col=0, parse_dates=True)
+    else:
+        df = pd.read_csv(PathOftheFile, sep='\t', names=ColumnTypes)
 print(df)
