@@ -80,10 +80,18 @@ class ImportedData:
 
     InputType = 'Name of the Column are defined,if not yes the names with the order should be defined'
 
-    def __int__(self, FilePath, InputType='yes'):
+    def __init__(self, FilePath, InputType='yes'):
         if InputType=='yes':
             data = pd.read_csv(FilePath, sep='\t', index_col=0, parse_dates=True)
         else:
             ColumnTypes = InputType.split(',')
             data = pd.read_csv(FilePath, sep='\t', names=ColumnTypes, index_col=0, parse_dates=True)
         self.data = data
+
+    def SimpleStatistics(self):
+        for Name in self.data._info_axis:
+            print('----------------',Name,'----------------------------------')
+            print('Mean value for ',Name,'is {0:.2f}'.format(self.data[Name].mean()))
+            print('Std value for ',Name,'is {0:.2f}'.format(self.data[Name].std()))
+            print('Max value for ',Name,'is {0:.2f}'.format(self.data[Name].max()))
+            print('Min value for ',Name,'is {0:.2f}'.format(self.data[Name].min()))
