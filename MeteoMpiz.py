@@ -1,5 +1,9 @@
 import numpy as np
 import simplekml
+import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
+
 
 class Environment:
     Pressure = 'atmospheric pressure'
@@ -37,15 +41,47 @@ class MeteoMast:
     TemperatureSensor_Height = 'Vector with the heights of the Sensors for the Temperature'
 
     def __init__(self, Height, VelocitySensor_Height, DirectionSensor_Height, TemperatureSensor_Height, name='Meteorological Mast', latitude=[], longitude=[]):
-        self.Height = Height
+        self.Height = np.asarray(Height)
         self.VelocitySensor_Height = VelocitySensor_Height
         self.DirectionSensor_Height = DirectionSensor_Height
         self.TemperatureSensor_Height = TemperatureSensor_Height
         self.name = name
         self.latitude = latitude
         self.longitude = longitude
-        if (latitude) and (longitude):
+        if latitude and longitude:
             kml = simplekml.Kml()
             kml.newpoint(name=name, coords=[(latitude, longitude)])
             kml.save(name+'.kml')
 
+    def visual(self):
+        fig = plt.figure()
+        ax1 = fig.add_subplot(1, 1, 1, axisbg='grey')
+        rect1 = matplotlib.patches.Rectangle((-2, 0), 4, self.Height, color='black')
+        ax1.set_title('Meteorologica Mast')
+        ax1.set_xlabel('Ground')
+        ax1.set_ylabel('Height[m]')
+        ax1.add_patch(rect1)
+        for Height in np.asarray([self.VelocitySensor_Height]):
+            plt.plot((0, 4), (Height, Height), 'k-')
+            ax1.text('Velocity sensor at:{0:.2f}'.format(Height))
+        for Height in np.asarray([self.DirectionSensor_Height]):
+            plt.plot((-4, 0), (Height, Height), 'k-')
+        for Height in np.asarray([self.TemperatureSensor_Height]):
+            plt.plot((-4, 0), (Height, Height), 'k-')
+
+        plt.xlim([-40, 40])
+        plt.ylim([0, self.Height+self.Height/10])
+        plt.show()
+
+
+class ImportedData:
+
+    InputType = 'Name of the Column are defined,if not yes the names with the order should be defined'
+
+    def __int__(self, FilePath, InputType='yes'):
+        if InputType=='yes':
+            data = pd.read_csv(FilePath, sep='\t', index_col=0, parse_dates=True)
+        else:
+            ColumnTypes = InputType.split(',')
+            data = pd.read_csv(FilePath, sep='\t', names=ColumnTypes, index_col=0, parse_dates=True)
+        self.data = data

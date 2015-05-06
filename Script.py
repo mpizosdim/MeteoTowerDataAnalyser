@@ -27,4 +27,6 @@ else:
 print(df)
 data = np.array([np.arange(10)]).T
 lol = MeteoMpiz.Environment(Pressure=101e3, AirGasConstant=287, AirDensity=[],Temperature=data)
+lol2 = MeteoMpiz.MeteoMast(90, VelocitySensor_Height=20, DirectionSensor_Height=[10,20,30], TemperatureSensor_Height=[30,40], name='Meteorological Mast')
+lol2.visual()
 lol.describe()
