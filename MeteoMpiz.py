@@ -41,10 +41,10 @@ class MeteoMast:
     TemperatureSensor_Height = 'Vector with the heights of the Sensors for the Temperature'
 
     def __init__(self, Height, VelocitySensor_Height, DirectionSensor_Height, TemperatureSensor_Height, name='Meteorological Mast', latitude=[], longitude=[]):
-        self.Height = np.asarray(Height)
-        self.VelocitySensor_Height = VelocitySensor_Height
-        self.DirectionSensor_Height = DirectionSensor_Height
-        self.TemperatureSensor_Height = TemperatureSensor_Height
+        self.Height = np.array(Height)
+        self.VelocitySensor_Height = np.array(VelocitySensor_Height)
+        self.DirectionSensor_Height = np.array(DirectionSensor_Height)
+        self.TemperatureSensor_Height = np.array(TemperatureSensor_Height)
         self.name = name
         self.latitude = latitude
         self.longitude = longitude
@@ -61,13 +61,15 @@ class MeteoMast:
         ax1.set_xlabel('Ground')
         ax1.set_ylabel('Height[m]')
         ax1.add_patch(rect1)
-        for Height in np.asarray([self.VelocitySensor_Height]):
+        for Height in self.VelocitySensor_Height:
             plt.plot((0, 4), (Height, Height), 'k-')
-            ax1.text('Velocity sensor at:{0:.2f}'.format(Height))
-        for Height in np.asarray([self.DirectionSensor_Height]):
+            ax1.text(5, Height,'Velocity sensor at:{0:.2f} m'.format(Height))
+        for Height in self.DirectionSensor_Height:
             plt.plot((-4, 0), (Height, Height), 'k-')
-        for Height in np.asarray([self.TemperatureSensor_Height]):
+            ax1.text(-25, Height, 'Direction sensor at:{0:.2f} m'.format(Height))
+        for Height in self.TemperatureSensor_Height:
             plt.plot((-4, 0), (Height, Height), 'k-')
+            ax1.text(-25, Height, 'Temperature sensor at:{0:.2f} m'.format(Height))
 
         plt.xlim([-40, 40])
         plt.ylim([0, self.Height+self.Height/10])
