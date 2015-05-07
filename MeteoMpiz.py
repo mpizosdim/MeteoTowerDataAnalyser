@@ -87,11 +87,51 @@ class ImportedData:
             ColumnTypes = InputType.split(',')
             data = pd.read_csv(FilePath, sep='\t', names=ColumnTypes, index_col=0, parse_dates=True)
         self.data = data
-
+        self.DataPeriod = pd.date_range(self.data.index[0]._repr_base, self.data.index[-1]._repr_base)
     def SimpleStatistics(self):
         for Name in self.data._info_axis:
-            print('----------------',Name,'----------------------------------')
-            print('Mean value for ',Name,'is {0:.2f}'.format(self.data[Name].mean()))
-            print('Std value for ',Name,'is {0:.2f}'.format(self.data[Name].std()))
-            print('Max value for ',Name,'is {0:.2f}'.format(self.data[Name].max()))
-            print('Min value for ',Name,'is {0:.2f}'.format(self.data[Name].min()))
+            print('----------------', Name,'----------------------------------')
+            print('Mean value for ', Name, 'is {0:.2f}'.format(self.data[Name].mean()))
+            print('Std value for ', Name, 'is {0:.2f}'.format(self.data[Name].std()))
+            print('Max value for ', Name, 'is {0:.2f}'.format(self.data[Name].max()))
+            print('Min value for ', Name, 'is {0:.2f}'.format(self.data[Name].min()))
+
+    def filter_Velocity(self, names, MinMaxVelocity = [0,100]):
+
+        for Name in names:
+            self.data[Name] =self.data[Name][(self.data[Name] > MinMaxVelocity[0]) & (self.data[Name] < MinMaxVelocity[1])]
+            print('Velocity is filter in sensor', Name, 'with Min Velocity ', MinMaxVelocity[0], '[m/s] and Max Velocity', MinMaxVelocity[1], '[m/s]')
+
+    def filter_Direction(self, names, MinMaxDirection=[0,360]):
+        for Name in names:
+            self.data[Name] =self.data[Name][(self.data[Name] > MinMaxDirection[0]) & (self.data[Name] < MinMaxDirection[1])]
+            print('Velocity is filter in sensor', Name, 'with Min Velocity ', MinMaxDirection[0], '[m/s] and Max Velocity', MinMaxDirection[1], '[m/s]')
+
+    def filter_Temperature(self,names, MinMaxTemperature = [-50,100]):
+
+        for Name in names:
+            self.data[Name] =self.data[Name][(self.data[Name] > MinMaxTemperature[0]) & (self.data[Name] < MinMaxTemperature[1])]
+            print('Velocity is filter in sensor', Name, 'with Min Velocity ', MinMaxTemperature[0], '[m/s] and Max Velocity', MinMaxTemperature[1], '[m/s]')
+
+    def set_Criticalvalues(self):
+        print('undone!')
+
+    def plot(self, names):
+        plt.style.use('ggplot')
+        plt.figure()
+        for Name in names:
+            self.data[Name].plot(label=Name)
+        plt.legend()
+        plt.show()
+
+    def MissingValues(self):
+        print('not ready yet..')
+        self.data['tvalue'] = self.data.index
+        self.data['delta'] = (self.data['tvalue']-self.data['tvalue'].shift()).fillna(0)
+        DtInSeconds = self.data['delta'].item().total_seconds()
+        plt.style.use('ggplot')
+        plt.figure()
+        DtInSeconds.plot()
+        #lol  = self.data.resample('10Min')
+        #difft = np.diff()
+
