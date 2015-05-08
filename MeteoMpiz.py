@@ -113,8 +113,16 @@ class ImportedData:
             self.data[Name] =self.data[Name][(self.data[Name] > MinMaxTemperature[0]) & (self.data[Name] < MinMaxTemperature[1])]
             print('Velocity is filter in sensor', Name, 'with Min Velocity ', MinMaxTemperature[0], '[m/s] and Max Velocity', MinMaxTemperature[1], '[m/s]')
 
-    def set_Criticalvalues(self):
+    def set_Criticalvalues(self, name, MinMaxVelocity=[], MinTemperature=[]):
         print('undone!')
+        if MinMaxVelocity:
+            print('Velocity  sensor is choused for Critical Analysis')
+            aPandas = self.data[name]
+            aPandas.plot()
+            aPandas[aPandas<MinMaxVelocity[0] and aPandas>MinMaxVelocity[1]].plot(color='red')
+            plt.show()
+        elif MinTemperature:
+            print('Temperature sensor is choused for Critical Analysis')
 
     def plot(self, names):
         plt.style.use('ggplot')
