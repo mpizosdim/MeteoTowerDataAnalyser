@@ -121,8 +121,10 @@ class ImportedData:
             PercentofTotal = (len(aPandas[aPandas<MinMaxVelocity[0]])/len(aPandas)+len(aPandas[aPandas>MinMaxVelocity[1]])/len(aPandas))*100
             print(PercentofTotal,'% of total observations is out of these limits of Velocity.')
             aPandas.plot()
-            aPandas[aPandas<MinMaxVelocity[0]].plot(color='red', marker='o',linestyle='')
-            aPandas[aPandas>MinMaxVelocity[1]].plot(color='red', marker='o',linestyle='')
+            if max(aPandas)>MinMaxVelocity[1]:
+                aPandas[aPandas>MinMaxVelocity[1]].plot(color='red', marker='o',linestyle='')
+            if min(aPandas)>MinMaxVelocity[0]:
+                aPandas[aPandas<MinMaxVelocity[0]].plot(color='red', marker='o',linestyle='')
             plt.show()
         elif MinTemperature:
             print('Temperature sensor is choused for Critical Analysis')
@@ -132,7 +134,7 @@ class ImportedData:
             aPandas.plot()
             aPandas[aPandas<MinTemperature[0]].plot(color='red', linecolor='o')
             plt.show()
-            
+
     def plot(self, names):
         plt.style.use('ggplot')
         plt.figure()
